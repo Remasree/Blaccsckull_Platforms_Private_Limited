@@ -1,0 +1,151 @@
+const { useState } = React;
+
+const App = () => {
+  // State for form fields and their validations
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+
+  // Validation states and error messages
+  const [firstNameError, setFirstNameError] = useState("");
+  const [lastNameError, setLastNameError] = useState("");
+  const [usernameError, setUsernameError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+
+  // Handler for input changes
+  const handleInputChange = (event, field) => {
+    const value = event.target.value;
+
+    // Clear previous error message
+    switch (field) {
+      case "firstName":
+        setFirstName(value);
+        setFirstNameError("");
+        break;
+      case "lastName":
+        setLastName(value);
+        setLastNameError("");
+        break;
+      case "username":
+        setUsername(value);
+        setUsernameError("");
+        break;
+      case "password":
+        setPassword(value);
+        setPasswordError("");
+        break;
+      default:
+        break;
+    }
+  };
+
+  // Form submission handler
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    // Perform validations
+    let valid = true;
+
+    if (!firstName.match(/^[A-Za-z]+$/)) {
+      setFirstNameError("Invalid firstname");
+      valid = false;
+    }
+
+    if (!lastName.match(/^[A-Za-z]+$/)) {
+      setLastNameError("Invalid lastname");
+      valid = false;
+    }
+
+    if (!username.match(/^[a-zA-Z0-9._]{5,30}$/)) {
+      setUsernameError("Invalid username");
+      valid = false;
+    }
+
+    if (!password.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[.!@#$%^&*()_+|?~]).{7,16}$/)) {
+      setPasswordError("Invalid password");
+      valid = false;
+    }
+
+    if (valid) {
+      alert("Form submitted successfully!");
+    }
+  };
+
+  return (
+    <div className="flex items-center justify-center">
+      <div className="gap-y-5 flex flex-col items-center">
+        <h1 className="text-2xl font-bold text-center">SignUp</h1>
+        <form onSubmit={handleSubmit}>
+          <div className="gap-y-5 px-5 flex flex-col items-center">
+            <div className="flex flex-row items-center justify-between">
+              <div className="w-[40%] flex flex-col items-start">
+                <label htmlFor="firstname">Firstname</label>
+                <input
+                  style={{ border: "1px solid black", marginRight: "15px" }}
+                  className="border-[1px] border-[#B7B7B7] rounded-full px-3 py-1 text-lg"
+                  type="text"
+                  name="firstname"
+                  id="firstname"
+                  value={firstName}
+                  onChange={(e) => handleInputChange(e, "firstName")}
+                />
+                {firstNameError && <p className="text-red-500">{firstNameError}</p>}
+              </div>
+              <div className="w-[40%] flex flex-col items-start">
+                <label htmlFor="lastname">Lastname</label>
+                <input
+                  style={{ border: "1px solid black" }}
+                  className="border-[1px] border-[#B7B7B7] rounded-full px-3 py-1 text-lg"
+                  type="text"
+                  name="lastname"
+                  id="lastname"
+                  value={lastName}
+                  onChange={(e) => handleInputChange(e, "lastName")}
+                />
+                {lastNameError && <p className="text-red-500">{lastNameError}</p>}
+              </div>
+            </div>
+            <div className="flex flex-row justify-between items-center">
+              <div className="w-[49%] flex flex-col items-start">
+                <label htmlFor="username">Username</label>
+                <input
+                  style={{ border: "1px solid black", marginRight: "15px" }}
+                  className="border-[1px] border-[#B7B7B7] rounded-full px-3 py-1 text-lg"
+                  type="text"
+                  name="username"
+                  id="username"
+                  value={username}
+                  onChange={(e) => handleInputChange(e, "username")}
+                />
+                {usernameError && <p className="text-red-500">{usernameError}</p>}
+              </div>
+              <div className="w-[49%] flex flex-col items-start">
+                <label htmlFor="password">Password</label>
+                <input
+                  style={{ border: "1px solid black" }}
+                  className="border-[1px] border-[#B7B7B7] rounded-full px-3 py-1 text-lg"
+                  type="password"
+                  name="password"
+                  id="password"
+                  value={password}
+                  onChange={(e) => handleInputChange(e, "password")}
+                />
+                {passwordError && <p className="text-red-500">{passwordError}</p>}
+              </div>
+            </div>
+            <button
+              style={{ border: "1px solid black" }}
+              type="submit"
+              className="border-[1px] border-[#B7B7B7] rounded-full px-3 py-1 text-lg"
+            >
+              Submit
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+};
+
+ReactDOM.render(<App />, document.getElementById("app"));
